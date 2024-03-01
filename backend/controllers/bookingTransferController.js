@@ -1,49 +1,15 @@
 import TransferBooking from '../models/TransferBooking.js' // Assuming you have a separate model for Transfer Bookings
-import aws from 'aws-sdk';
-const SES_CONFIG = {
-    accessKeyId:" AKIAZL6AEHK5TKCA2BDI", // Ensure you have these values in your environment variables
-    secretAccessKey: "6avasF3NN7IbCfFmirRjXu1N8ZWNyHFvW5OkC13K",
-    region: 'us-east-1', // Replace with your AWS SES region
-  };
+import { sendEmail } from "../utils/mailer.js"; // Ensure this path is correct
 
   
-  const AWS_SES=new aws.SES(SES_CONFIG);
-  
-  const sendEmail = async (recipientEmail, subject, htmlContent) => {
-    let params = {
-        Source: "prosmarttravel@gmail.com",
-        Destination: {
-            ToAddresses: ["prosmarttravel@gmail.com"]
-        },
-        ReplyToAddresses: ["prosmarttravel@gmail.com"],
-        Message: {
-            Body: {
-                Html: {
-                    Charset: 'UTF-8',
-                    Data: htmlContent
-                }
-            },
-            Subject: {
-                Charset: 'UTF-8',
-                Data: subject
-            }
-        }
-    };
-    try {
-        await AWS_SES.sendEmail(params).promise();
-        console.log(`Email sent to ${recipientEmail}`);
-    } catch (error) {
-        console.error(error);
-    }
-};
-  export const createTransferBooking = async (req, res) => {
+export const createTransferBooking = async (req, res) => {
     const newTransferBooking = new TransferBooking(req.body);
     
     try {
         const savedTransferBooking = await newTransferBooking.save();
         console.log(savedTransferBooking);
 
-        // Email content
+        // Email content, customized for transfer booking
         const formattedMessage = `
             <html><body>
             <h1>New Transfer Booking</h1>
@@ -60,17 +26,35 @@ const SES_CONFIG = {
             </ul>
             </body></html>`;
 
-        // Sending the email
-        await sendEmail(savedTransferBooking.userEmail, 'New Transfer Booking', formattedMessage);
+        // Constructing the params object for sendEmail
+        const emailParams = {
+            Destination: {
+                ToAddresses: [savedTransferBooking.userEmail] // Assuming you want to send to the user's email
+            },
+            Message: {
+                Body: {
+                    Html: {
+                        Charset: 'UTF-8',
+                        Data: formattedMessage
+                    }
+                },
+                Subject: {
+                    Charset: 'UTF-8',
+                    Data: 'New Transfer Booking'
+                }
+            },
+            Source: 'prosmarttravel@gmail.com', // Sender's email address
+        };
 
+        // Send the email using the modified sendEmail call
+        await sendEmail(emailParams);
+  
         res.status(200).json({ success: true, message: 'Your transfer is booked', data: savedTransferBooking });
     } catch (error) {
         console.error("Error processing booking: ", error);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
 };
-
-
     // get single booking
     export const getTransferBooking =async (req,res)=>{
         const  id = req.params.id
