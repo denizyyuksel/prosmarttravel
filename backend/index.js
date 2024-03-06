@@ -17,7 +17,6 @@ const app = express();
 const port = process.env.PORT || 8000;
 const corsOptions = {
     origin: ["https://prosmarttravel-3.onrender.com", "https://www.prosmarttravel.com"],
- ],
     credentials:true,
 }
 
