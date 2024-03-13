@@ -16,9 +16,9 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 8000;
 const corsOptions = {
-    origin: ["www.prosmarttravel.com","www.prosmarttravel.com/tours/search/getFeaturedTours","https://www.prosmarttravel.com","http://www.prosmarttravel.com"],
-    credentials:true,
-}
+    origin: ["http://prosmarttravel.com", "https://prosmarttravel.com"],
+    credentials: true,
+};
 
 // Connect to MongoDB
 mongoose.set('strictQuery', false);
