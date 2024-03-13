@@ -38,14 +38,14 @@ const connect = async () => {
 app.use(express.json());
 app.use(cors(corsOptions));
 app.use(cookieParser());
-app.use("/api/v1/auth",authRoute);
-app.use('/api/v1/tours',tourRoute);
-app.use('/api/v1/transfers',transferRoute);
-app.use('/api/v1/transfer-booking', transferBookingRoute); // Using the transfer booking routes
+app.use("/auth", authRoute);
+app.use('/tours', tourRoute);
+app.use('/transfers', transferRoute);
+app.use('/transfer-booking', transferBookingRoute); // Using the transfer booking routes
 
-app.use('/api/v1/users',userRoute);
-app.use('/api/v1/review',reviewRoute);
-app.use('/api/v1/booking',bookingRoute);
+app.use('/users', userRoute);
+app.use('/review', reviewRoute);
+app.use('/booking', bookingRoute);
 
 
 app.listen(port, () =>{
