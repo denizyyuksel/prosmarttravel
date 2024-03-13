@@ -16,7 +16,7 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 8000;
 const corsOptions = {
-    origin: ["https://prosmarttravel-3.onrender.com","https://prosmarttravel-3.onrender.com","https://www.prosmarttravel.com"],
+    origin: ["www.prosmarttravel.com","www.prosmarttravel.com/tours/search/getFeaturedTours","https://www.prosmarttravel.com","https://www.prosmarttravel.com/tours/search/getFeaturedTours"],
     credentials:true,
 }
 
